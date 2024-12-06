@@ -3,46 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高密度粒子背景 - 星战风格</title>
+    <title>星战滚动文本</title>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <!-- 星战风格字体 -->
+    <!-- 加载星战风格的像素字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        body, html {
+        body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #000;
+            background: black;
+            color: yellow;
+            font-family: 'Press Start 2P', Arial, sans-serif;
         }
+
         #particles-js {
+            position: absolute;
             width: 100%;
             height: 100%;
-            position: absolute;
+            z-index: 1; /* 粒子背景位于底层 */
         }
-        h1 {
+
+        #scroll-container {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Press Start 2P', Arial, sans-serif;
-            color: #FFD700; /* 金黄色 */
-            font-size: 2rem;
-            text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.8); /* 光晕效果 */
-            text-align: center;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 2; /* 滚动文本位于粒子背景之上 */
+        }
+
+        #scrolling-text {
+            position: absolute;
+            bottom: -100%;
+            width: 80%; /* 文本宽度适当缩小 */
+            left: 10%; /* 居中偏移 */
+            text-align: justify;
+            line-height: 1.8;
+            font-size: 1rem;
+            animation: scrollUp 30s linear infinite; /* 30秒滚动完成一次 */
+            text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.8); /* 黄色光晕效果 */
+        }
+
+        @keyframes scrollUp {
+            0% {
+                bottom: -100%;
+            }
+            100% {
+                bottom: 100%;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 粒子背景 -->
     <div id="particles-js"></div>
-    <h1>欢迎来到银河系！</h1>
+
+    <!-- 滚动文本 -->
+    <div id="scroll-container">
+        <div id="scrolling-text">
+            <p>Bright star, would I were steadfast as thou art—</p>
+            <p>Not in lone splendour hung aloft the night,</p>
+            <p>And watching, with eternal lids apart,</p>
+            <p>Like nature’s patient, sleepless Eremite,</p>
+            <p>The moving waters at their priestlike task</p>
+            <p>Of pure ablution round earth’s human shores,</p>
+            <p>Or gazing on the new soft-fallen mask</p>
+            <p>Of snow upon the mountains and the moors—</p>
+            <p>No—yet still steadfast, still unchangeable,</p>
+            <p>Pillow’d upon my fair love’s ripening breast,</p>
+            <p>To feel for ever its soft fall and swell,</p>
+            <p>Awake for ever in a sweet unrest,</p>
+            <p>Still, still to hear her tender-taken breath,</p>
+            <p>And so live ever—or else swoon to death.</p>
+        </div>
+    </div>
 
     <script>
+        // 初始化粒子背景
         particlesJS('particles-js', {
             particles: {
                 number: {
-                    value: 150,
+                    value: 150, // 粒子数量
                     density: {
                         enable: true,
                         value_area: 800
@@ -65,14 +109,14 @@
                 },
                 line_linked: {
                     enable: true,
-                    distance: 100,
+                    distance: 100, // 连接线距离
                     color: "#ffffff",
                     opacity: 0.4,
                     width: 1
                 },
                 move: {
                     enable: true,
-                    speed: 3,
+                    speed: 3, // 粒子移动速度
                     direction: "none",
                     random: false,
                     straight: false,
