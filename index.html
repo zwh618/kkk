@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>星战滚动文本</title>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <!-- 加载星战风格的像素字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
@@ -23,7 +22,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            z-index: 1; /* 粒子背景位于底层 */
+            z-index: 1;
         }
 
         #scroll-container {
@@ -32,19 +31,18 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            z-index: 2; /* 滚动文本位于粒子背景之上 */
+            z-index: 2;
         }
 
         #scrolling-text {
             position: absolute;
             bottom: -100%;
-            width: 100%; /* 文本宽度适当缩小 */
-            left: 0%; /* 居中偏移 */
+            width: 100%;
             text-align: center;
             line-height: 1.8;
             font-size: 1.2rem;
-            animation: scrollUp 30s linear infinite; /* 30秒滚动完成一次 */
-            text-shadow: 4px 4px 16px rgba(255, 215, 0, 1); /* 黄色光晕效果 */
+            animation: scrollUp 40s linear infinite;
+            text-shadow: 6px 6px 32px rgba(255, 215, 0, 1);
         }
 
         @keyframes scrollUp {
@@ -54,6 +52,17 @@
             100% {
                 bottom: 100%;
             }
+        }
+
+        #audio-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: yellow;
+            cursor: pointer;
+            z-index: 9999;
+            text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.8);
         }
     </style>
 </head>
@@ -81,32 +90,18 @@
         </div>
     </div>
 
-    <!-- 音效标签 -->
+    <!-- 音效图标 -->
+    <div id="audio-icon" onclick="toggleAudio()">🎵</div>
+
+    <!-- 音效 -->
     <audio id="background-audio" src="音频.mp3" loop></audio>
 
-    <!-- 音效控制脚本 -->
-    <script>
-        const audio = document.getElementById('background-audio');
-        window.addEventListener('load', () => {
-            // 自动播放尝试
-            audio.play().catch(() => {
-                console.log("音效需要用户交互来播放。");
-            });
-        });
-
-        document.body.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play(); // 用户交互播放音效
-            }
-        });
-    </script>
-</body>
     <script>
         // 初始化粒子背景
         particlesJS('particles-js', {
             particles: {
                 number: {
-                    value: 350, // 粒子数量
+                    value: 400, // 粒子数量
                     density: {
                         enable: true,
                         value_area: 800
@@ -119,30 +114,27 @@
                 },
                 opacity: {
                     value: 0.6,
-                    random: false,
-                    anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false }
+                    random: false
                 },
                 size: {
                     value: 3,
-                    random: true,
-                    anim: { enable: false, speed: 40, size_min: 0.1, sync: false }
+                    random: true
                 },
                 line_linked: {
                     enable: true,
-                    distance: 100, // 连接线距离
+                    distance: 100,
                     color: "#ffffff",
                     opacity: 0.4,
                     width: 1
                 },
                 move: {
                     enable: true,
-                    speed: 3, // 粒子移动速度
+                    speed: 3,
                     direction: "none",
                     random: false,
                     straight: false,
                     out_mode: "out",
-                    bounce: false,
-                    attract: { enable: false, rotateX: 600, rotateY: 1200 }
+                    bounce: false
                 }
             },
             interactivity: {
@@ -161,6 +153,27 @@
                 }
             },
             retina_detect: true
+        });
+
+        // 音效控制
+        function toggleAudio() {
+            const audio = document.getElementById('background-audio');
+            const icon = document.getElementById('audio-icon');
+            if (audio.paused) {
+                audio.play();
+                icon.textContent = '🔊'; // 图标显示音效开启
+            } else {
+                audio.pause();
+                icon.textContent = '🔇'; // 图标显示音效关闭
+            }
+        }
+
+        // 自动播放尝试
+        const audio = document.getElementById('background-audio');
+        window.addEventListener('load', () => {
+            audio.play().catch(() => {
+                console.log("音效需要用户交互来播放。");
+            });
         });
     </script>
 </body>
