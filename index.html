@@ -16,7 +16,7 @@
             overflow: hidden;
             background: black;
             color: yellow;
-            font-family: 'Press Start 2P', Arial, sans-serif;
+            font-family: 'Georgia', serif;
         }
 
         #particles-js {
@@ -38,18 +38,18 @@
         #scrolling-text {
             position: absolute;
             bottom: -100%;
-            width: 80%; /* 文本宽度适当缩小 */
-            left: 10%; /* 居中偏移 */
+            width: 100%; /* 文本宽度适当缩小 */
+            left: 0%; /* 居中偏移 */
             text-align: justify;
             line-height: 1.8;
-            font-size: 1rem;
+            font-size: 1.2rem;
             animation: scrollUp 30s linear infinite; /* 30秒滚动完成一次 */
-            text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.8); /* 黄色光晕效果 */
+            text-shadow: 4px 4px 16px rgba(255, 215, 0, 1); /* 黄色光晕效果 */
         }
 
         @keyframes scrollUp {
             0% {
-                bottom: -100%;
+                bottom: -40%;
             }
             100% {
                 bottom: 100%;
@@ -86,7 +86,7 @@
         particlesJS('particles-js', {
             particles: {
                 number: {
-                    value: 150, // 粒子数量
+                    value: 350, // 粒子数量
                     density: {
                         enable: true,
                         value_area: 800
