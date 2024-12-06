@@ -81,6 +81,26 @@
         </div>
     </div>
 
+    <!-- 音效标签 -->
+    <audio id="background-audio" src="/sounds/sound.mp3" loop></audio>
+
+    <!-- 音效控制脚本 -->
+    <script>
+        const audio = document.getElementById('background-audio');
+        window.addEventListener('load', () => {
+            // 自动播放尝试
+            audio.play().catch(() => {
+                console.log("音效需要用户交互来播放。");
+            });
+        });
+
+        document.body.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play(); // 用户交互播放音效
+            }
+        });
+    </script>
+</body>
     <script>
         // 初始化粒子背景
         particlesJS('particles-js', {
