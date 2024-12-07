@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>浪漫表白</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Noto+Sans+SC:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -15,88 +14,131 @@
             align-items: center;
             height: 100vh;
             color: white;
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: 'Arial', sans-serif;
             overflow: hidden;
         }
 
-        #display-container {
+        #intro, #language-display, #final-message {
+            position: absolute;
             text-align: center;
-            animation: fadeInOut 2s infinite;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        #intro.active, #language-display.active, #final-message.active {
+            opacity: 1;
         }
 
         #word {
             font-size: 3rem;
-            font-family: 'Great Vibes', cursive;
-            transition: transform 1s ease;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         #pronunciation {
-            margin-top: 10px;
             font-size: 1.5rem;
             font-style: italic;
         }
 
-        #final-message {
-            display: none;
-            font-size: 3rem;
-            color: #ffd700;
-            font-family: 'Great Vibes', cursive;
-            animation: heartBeat 2s infinite;
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background: #ffd700;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0.8); }
-        }
-
-        @keyframes heartBeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        button:focus {
+            outline: none;
         }
     </style>
 </head>
 <body>
-    <div id="display-container">
+    <!-- 启动文案 -->
+    <div id="intro" class="active">
+        <h1>嘿！你知道美丽在不同语言中是如何表达的吗？</h1>
+    </div>
+
+    <!-- 语言展示部分 -->
+    <div id="language-display">
         <div id="word">Beautiful</div>
         <div id="pronunciation">/ˈbjuːtɪfəl/</div>
+        <button id="next-button">点击播放声音</button>
     </div>
-    <div id="final-message">我的语言：李小花</div>
+
+    <!-- 最终表白 -->
+    <div id="final-message">
+        <h1>我的语言：李小花</h1>
+    </div>
 
     <script>
-        // 定义语言和美丽的表达
-        const words = [
-            { text: "Beautiful", pronunciation: "/ˈbjuːtɪfəl/" },
-            { text: "Belle", pronunciation: "/bɛl/ (法语)" },
-            { text: "Hermosa", pronunciation: "/erˈmosa/ (西班牙语)" },
-            { text: "Красивый", pronunciation: "/kraˈsivɨj/ (俄语)" },
-            { text: "Schön", pronunciation: "/ʃøːn/ (德语)" },
-            { text: "美丽", pronunciation: "/měi lì/ (中文)" },
+        // 数据定义：不同语言的单词、发音、音频路径
+        const languages = [
+            { word: "Beautiful", pronunciation: "/ˈbjuːtɪfəl/", audio: "beautiful.mp3" },
+            { word: "Belle", pronunciation: "/bɛl/ (法语)", audio: "belle.mp3" },
+            { word: "Hermosa", pronunciation: "/erˈmosa/ (西班牙语)", audio: "hermosa.mp3" },
+            { word: "Красивый", pronunciation: "/kraˈsivɨj/ (俄语)", audio: "krassiviy.mp3" },
+            { word: "Schön", pronunciation: "/ʃøːn/ (德语)", audio: "schon.mp3" },
+            { word: "美丽", pronunciation: "/měi lì/ (中文)", audio: "meili.mp3" },
         ];
 
-        const finalMessage = "我的语言：李小花"; // 表白语句
-        const container = document.getElementById("display-container");
-        const wordElement = document.getElementById("word");
-        const pronunciationElement = document.getElementById("pronunciation");
-        const finalMessageElement = document.getElementById("final-message");
+        // 获取 DOM 元素
+        const intro = document.getElementById('intro');
+        const languageDisplay = document.getElementById('language-display');
+        const finalMessage = document.getElementById('final-message');
+        const wordElement = document.getElementById('word');
+        const pronunciationElement = document.getElementById('pronunciation');
+        const nextButton = document.getElementById('next-button');
 
-        let index = 0;
+        let index = 0; // 当前语言索引
+        let isPlaying = false; // 是否正在播放音频
 
-        function showNextWord() {
-            if (index < words.length) {
-                // 显示当前语言文字
-                wordElement.textContent = words[index].text;
-                pronunciationElement.textContent = words[index].pronunciation;
+        // 初始化音频对象
+        let audio = new Audio();
+
+        // 显示启动文案 3 秒钟后消失
+        setTimeout(() => {
+            intro.classList.remove('active');
+            languageDisplay.classList.add('active');
+        }, 3000);
+
+        // 显示下一个语言或结束
+        function showNextLanguage() {
+            if (isPlaying) {
+                // 如果正在播放音频，则跳过到下一个语言
                 index++;
+                if (index < languages.length) {
+                    updateLanguage();
+                } else {
+                    languageDisplay.classList.remove('active');
+                    finalMessage.classList.add('active');
+                }
+                isPlaying = false;
+                nextButton.textContent = "点击播放声音";
             } else {
-                // 显示最终表白语句
-                container.style.display = "none";
-                finalMessageElement.style.display = "block";
+                // 播放当前语言的音频
+                audio.src = languages[index].audio;
+                audio.play();
+                isPlaying = true;
+                nextButton.textContent = "下一种语言";
             }
         }
 
-        // 每 3 秒切换一次文字
-        setInterval(showNextWord, 3000);
+        // 更新语言显示
+        function updateLanguage() {
+            const language = languages[index];
+            wordElement.textContent = language.word;
+            pronunciationElement.textContent = language.pronunciation;
+        }
+
+        // 初始化第一个语言
+        updateLanguage();
+
+        // 按钮点击事件
+        nextButton.addEventListener('click', showNextLanguage);
     </script>
 </body>
 </html>
