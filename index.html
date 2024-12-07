@@ -70,6 +70,22 @@
 
         #final-message span {
             display: block;
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        #final-message .language {
+            font-size: 2rem;
+        }
+
+        #final-message .name {
+            font-size: 4rem;
+        }
+
+        #final-message span.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         @keyframes fadeInOut {
@@ -94,8 +110,8 @@
 
     <!-- 最终表白 -->
     <div id="final-message">
-        <span>我的语言：</span>
-        <span>李小花</span>
+        <span class="language">我的语言：</span>
+        <span class="name">李小花</span>
     </div>
 
     <script>
@@ -116,6 +132,9 @@
         const wordElement = document.getElementById('word');
         const pronunciationElement = document.getElementById('pronunciation');
         const nextButton = document.getElementById('next-button');
+
+        const finalLanguage = finalMessage.querySelector('.language');
+        const finalName = finalMessage.querySelector('.name');
 
         let index = 0; // 当前语言索引
         let isPlaying = false; // 是否正在播放音频
@@ -139,6 +158,7 @@
                 } else {
                     languageDisplay.classList.remove('active');
                     finalMessage.classList.add('active');
+                    showFinalMessage();
                 }
                 isPlaying = false;
                 nextButton.textContent = "点击播放声音";
@@ -160,6 +180,14 @@
 
         // 初始化第一个语言
         updateLanguage();
+
+        // 显示最终表白动画
+        function showFinalMessage() {
+            finalLanguage.classList.add('visible');
+            setTimeout(() => {
+                finalName.classList.add('visible');
+            }, 1500); // 延迟显示名字
+        }
 
         // 按钮点击事件
         nextButton.addEventListener('click', showNextLanguage);
