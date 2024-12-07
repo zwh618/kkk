@@ -141,6 +141,7 @@
 
         let index = 0; // 当前语言索引
         let isPlaying = false; // 是否正在播放音频
+        let isFinalNameVisible = false; // 名字是否已显示
 
         // 初始化音频对象
         let audio = new Audio();
@@ -151,7 +152,7 @@
             languageDisplay.classList.add('active');
         }, 3000);
 
-        // 显示下一个语言或结束
+        // 显示下一个语言或进入最终表白
         function showNextLanguage() {
             if (isPlaying) {
                 // 如果正在播放音频，则跳过到下一个语言
@@ -187,9 +188,17 @@
         // 显示最终表白动画
         function showFinalMessage() {
             finalLanguage.classList.add('visible');
-            setTimeout(() => {
+            nextButton.textContent = "点击显示名字";
+            nextButton.onclick = showFinalName;
+        }
+
+        // 显示名字
+        function showFinalName() {
+            if (!isFinalNameVisible) {
                 finalName.classList.add('visible');
-            }, 1500); // 延迟显示名字
+                nextButton.style.display = "none"; // 隐藏按钮
+                isFinalNameVisible = true;
+            }
         }
 
         // 按钮点击事件
