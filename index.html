@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>浪漫表白</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Noto+Serif:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Noto Serif', serif;
+            font-family: 'Arial', sans-serif;
             overflow: hidden;
+            background: #000; /* 备用背景颜色 */
         }
 
         /* 背景视频样式 */
@@ -21,14 +21,22 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: -1; /* 确保视频位于所有内容的后面 */
+            z-index: -1; /* 确保视频在所有内容的后面 */
         }
 
-        #intro, #language-display, #final-message {
-            position: absolute;
+        /* 居中内容样式 */
+        .center-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
-            width: 100%;
             color: white;
+            z-index: 1; /* 确保文字在视频前面 */
+        }
+
+        /* 文字样式 */
+        #intro, #language-display, #final-message {
             opacity: 0;
             transition: opacity 1s ease-in-out;
         }
@@ -38,17 +46,24 @@
         }
 
         #word {
-            font-size: 4rem;
-            font-family: 'Great Vibes', cursive;
-            margin-bottom: 10px;
+            font-size: 4rem; /* 放大文字 */
         }
 
         #pronunciation {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-style: italic;
         }
 
-        button {
+        #final-message .language {
+            font-size: 4rem; /* 放大两倍 */
+        }
+
+        #final-message .name {
+            font-size: 8rem; /* 再放大两倍 */
+        }
+
+        /* 播放声音按钮样式 */
+        #play-sound-button {
             position: fixed;
             bottom: 30px;
             left: 50%;
@@ -63,38 +78,8 @@
             z-index: 10;
         }
 
-        button:focus {
+        #play-sound-button:focus {
             outline: none;
-        }
-
-        #final-message {
-            font-size: 3rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: 'Great Vibes', cursive;
-            color: #ffd700;
-            line-height: 1.5;
-        }
-
-        #final-message span {
-            display: block;
-            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        #final-message .language {
-            font-size: 2rem;
-        }
-
-        #final-message .name {
-            font-size: 4rem;
-        }
-
-        #final-message span.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
     </style>
 </head>
@@ -105,109 +90,75 @@
         您的浏览器不支持 HTML5 视频。
     </video>
 
-    <!-- 启动文案 -->
-    <div id="intro" class="active">
-        <h1 style="font-family: 'Great Vibes', cursive; font-size: 3rem;">嘿！你知道美丽在不同语言中是如何表达的吗？</h1>
+    <!-- 中央内容 -->
+    <div class="center-content" id="intro" class="active">
+        <h1>嘿！你知道美丽在不同语言中是如何表达的吗？</h1>
     </div>
 
-    <!-- 语言展示部分 -->
-    <div id="language-display">
+    <div class="center-content" id="language-display">
         <div id="word">Beautiful</div>
         <div id="pronunciation">/ˈbjuːtɪfəl/</div>
-        <button id="next-button">点击播放声音</button>
     </div>
 
-    <!-- 最终表白 -->
-    <div id="final-message">
+    <div class="center-content" id="final-message">
         <span class="language">我的语言：</span>
         <span class="name">李小花</span>
     </div>
 
-    <script>
-        // 数据定义：不同语言的单词、发音、音频路径
-        const languages = [
-            { word: "Beautiful", pronunciation: "/ˈbjuːtɪfəl/ (英语)", audio: "beautiful.mp3" },
-            { word: "Belle", pronunciation: "/bɛl/ (法语)", audio: "belle.mp3" },
-            { word: "Hermosa", pronunciation: "/erˈmosa/ (西班牙语)", audio: "hermosa.mp3" },
-            { word: "Красивый", pronunciation: "/kraˈsivɨj/ (俄语)", audio: "krassiviy.mp3" },
-            { word: "Schön", pronunciation: "/ʃøːn/ (德语)", audio: "schon.mp3" },
-            { word: "美丽", pronunciation: "/měi lì/ (中文)", audio: "meili.mp3" },
-            { word: "美しい", pronunciation: "/utsukushii/ (日语)", audio: "utsukushii.mp3" },
-            { word: "아름답다", pronunciation: "/a-reum-dap-da/ (韩语)", audio: "areumdapda.mp3" },
-            { word: "Bella", pronunciation: "/ˈbɛlla/ (意大利语)", audio: "bella.mp3" }
-        ];
+    <!-- 播放声音按钮 -->
+    <button id="play-sound-button">点击播放视频声音</button>
 
+    <script>
+        const video = document.getElementById('background-video');
+        const playSoundButton = document.getElementById('play-sound-button');
         const intro = document.getElementById('intro');
         const languageDisplay = document.getElementById('language-display');
         const finalMessage = document.getElementById('final-message');
+
         const wordElement = document.getElementById('word');
         const pronunciationElement = document.getElementById('pronunciation');
-        const nextButton = document.getElementById('next-button');
-        const backgroundVideo = document.getElementById('background-video');
-
-        const finalLanguage = finalMessage.querySelector('.language');
-        const finalName = finalMessage.querySelector('.name');
+        const languages = [
+            { word: "Beautiful", pronunciation: "/ˈbjuːtɪfəl/ (英语)" },
+            { word: "Belle", pronunciation: "/bɛl/ (法语)" },
+            { word: "Hermosa", pronunciation: "/erˈmosa/ (西班牙语)" },
+            { word: "Красивый", pronunciation: "/kraˈsivɨj/ (俄语)" },
+            { word: "Schön", pronunciation: "/ʃøːn/ (德语)" },
+            { word: "美丽", pronunciation: "/měi lì/ (中文)" },
+            { word: "美しい", pronunciation: "/utsukushii/ (日语)" },
+            { word: "아름답다", pronunciation: "/a-reum-dap-da/ (韩语)" },
+            { word: "Bella", pronunciation: "/ˈbɛlla/ (意大利语)" }
+        ];
 
         let index = 0;
-        let isPlaying = false;
-        let isFinalNameVisible = false;
 
-        let audio = new Audio();
-
-        // 显示启动文案 3 秒钟后消失
+        // 初始化
         setTimeout(() => {
             intro.classList.remove('active');
             languageDisplay.classList.add('active');
         }, 3000);
 
+        // 播放视频声音
+        playSoundButton.addEventListener('click', () => {
+            video.muted = false;
+            video.play();
+            playSoundButton.style.display = 'none'; // 隐藏按钮
+        });
+
+        // 显示下一种语言
         function showNextLanguage() {
-            if (isPlaying) {
+            if (index < languages.length) {
+                const language = languages[index];
+                wordElement.textContent = language.word;
+                pronunciationElement.textContent = language.pronunciation;
                 index++;
-                if (index < languages.length) {
-                    updateLanguage();
-                } else {
-                    languageDisplay.classList.remove('active');
-                    finalMessage.classList.add('active');
-                    showFinalMessage();
-                }
-                isPlaying = false;
-                nextButton.textContent = "点击播放声音";
             } else {
-                audio.src = languages[index].audio;
-                audio.play();
-                isPlaying = true;
-                nextButton.textContent = "下一种语言";
+                languageDisplay.classList.remove('active');
+                finalMessage.classList.add('active');
             }
         }
 
-        function updateLanguage() {
-            const language = languages[index];
-            wordElement.textContent = language.word;
-            pronunciationElement.textContent = language.pronunciation;
-        }
-
-        updateLanguage();
-
-        function showFinalMessage() {
-            finalLanguage.classList.add('visible');
-            nextButton.textContent = "点击显示名字";
-            nextButton.onclick = showFinalName;
-        }
-
-        function showFinalName() {
-            if (!isFinalNameVisible) {
-                finalName.classList.add('visible');
-                nextButton.style.display = "none";
-                isFinalNameVisible = true;
-
-                // 切换背景视频
-                backgroundVideo.src = "2.MOV";
-                backgroundVideo.load();
-                backgroundVideo.play();
-            }
-        }
-
-        nextButton.addEventListener('click', showNextLanguage);
+        // 每隔 5 秒切换语言
+        setInterval(showNextLanguage, 5000);
     </script>
 </body>
 </html>
