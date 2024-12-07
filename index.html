@@ -37,6 +37,17 @@
             z-index: 1; /* 确保文字在视频前面 */
         }
 
+        /* 开场白样式 */
+        #intro {
+            font-size: 3rem;
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #intro.hidden {
+            opacity: 0;
+        }
+
         /* 文字样式 */
         #language-display {
             opacity: 0;
@@ -82,6 +93,11 @@
         您的浏览器不支持 HTML5 视频。
     </video>
 
+    <!-- 开场白 -->
+    <div class="center-content" id="intro">
+        嘿！你知道美丽在不同语言中是如何表达的吗？
+    </div>
+
     <!-- 中央内容 -->
     <div class="center-content" id="language-display">
         <div id="word">Beautiful</div>
@@ -93,6 +109,7 @@
 
     <script>
         const backgroundVideo = document.getElementById('background-video');
+        const intro = document.getElementById('intro');
         const languageDisplay = document.getElementById('language-display');
         const wordElement = document.getElementById('word');
         const pronunciationElement = document.getElementById('pronunciation');
@@ -141,9 +158,12 @@
                     playSoundButton.style.display = 'none';
                 }
             } else {
-                audio.src = languages[index].audio;
-                audio.volume = 3.0; // 放大音量
-                audio.play();
+                const currentLanguage = languages[index];
+                audio.src = currentLanguage.audio;
+                audio.volume = 1.0; // 音量大小
+                audio.play().catch((err) => {
+                    console.error("音频无法播放: ", err);
+                });
                 playSoundButton.textContent = "点击切换到下一种语言";
                 isPlaying = true;
             }
@@ -154,8 +174,14 @@
             backgroundVideo.muted = false;
         });
 
-        // 初始化
-        showLanguage();
+        // 初始化：显示开场白并自动切换到语言展示
+        setTimeout(() => {
+            intro.classList.add('hidden');
+            setTimeout(() => {
+                intro.style.display = 'none';
+                showLanguage();
+            }, 1000); // 等待隐藏动画完成
+        }, 3000); // 开场白显示时间
     </script>
 </body>
 </html>
