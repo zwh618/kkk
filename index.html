@@ -36,11 +36,11 @@
         }
 
         #word {
-            font-size: 5rem; /* 增大语言文字字体 */
+            font-size: 7rem; /* 增大语言文字字体 */
         }
 
         #pronunciation {
-            font-size: 2rem; /* 增大音标字体 */
+            font-size: 3rem; /* 增大音标字体 */
             margin-top: 10px;
             font-style: italic;
         }
@@ -139,8 +139,8 @@
         let isMuted = true; // 默认静音状态
 
         // 设置视频默认音量
-        backgroundVideo.volume = 0.3;
-        finalVideo.volume = 0.3;
+        backgroundVideo.volume = 0.1;
+        finalVideo.volume = 0.1;
 
         // 声音控制图标点击事件
         soundControl.addEventListener('click', () => {
@@ -186,7 +186,7 @@
             } else {
                 const currentLanguage = languages[index];
                 audio.src = currentLanguage.audio;
-                audio.volume = 1.0; // 设置读音音量
+                audio.volume = 1.5; // 设置读音音量
                 audio.play()
                     .then(() => {
                         isPlaying = true;
