@@ -11,24 +11,14 @@
             padding: 0;
             font-family: 'Noto Serif', serif;
             overflow: hidden;
-        }
-
-        /* 背景视频样式 */
-        #background-video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1; /* 确保视频位于所有内容的后面 */
+            background: #f0f0f0; /* 使用灰色背景代替视频 */
         }
 
         #intro, #language-display, #final-message {
             position: absolute;
             text-align: center;
             width: 100%;
-            color: white;
+            color: black; /* 字体颜色调整为黑色 */
             opacity: 0;
             transition: opacity 1s ease-in-out;
         }
@@ -73,7 +63,7 @@
             flex-direction: column;
             align-items: center;
             font-family: 'Great Vibes', cursive;
-            color: #ffd700;
+            color: black; /* 字体颜色调整为黑色 */
             line-height: 1.5;
         }
 
@@ -99,12 +89,6 @@
     </style>
 </head>
 <body>
-    <!-- 背景视频 -->
-    <video id="background-video" autoplay loop muted>
-        <source src="background.mp4" type="video/mp4">
-        您的浏览器不支持 HTML5 视频。
-    </video>
-
     <!-- 启动文案 -->
     <div id="intro" class="active">
         <h1 style="font-family: 'Great Vibes', cursive; font-size: 3rem;">嘿！你知道美丽在不同语言中是如何表达的吗？</h1>
