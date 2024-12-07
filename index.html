@@ -10,68 +10,40 @@
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
-            overflow: hidden;
-            background: #000; /* 备用背景颜色 */
-        }
-
-        /* 背景视频样式 */
-        #background-video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1; /* 确保视频在所有内容的后面 */
-        }
-
-        /* 居中内容样式 */
-        .center-content {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #e0e0e0; /* 深色白色 */
-            font-family: 'Great Vibes', cursive; /* 使用花体字体 */
-            z-index: 1; /* 确保文字在视频前面 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #000;
+            color: #fff;
         }
 
         /* 开场白样式 */
         #intro {
             font-size: 3rem;
-            opacity: 1;
-            transition: opacity 1s ease-in-out;
+            font-family: 'Great Vibes', cursive;
+            text-align: center;
         }
 
         #intro.hidden {
-            opacity: 0;
+            display: none; /* 隐藏开场白 */
         }
 
-        /* 语言展示样式 */
+        /* 主界面样式 */
         #language-display {
-            opacity: 0;
-            font-size: 6rem; /* 放大两倍 */
-            transition: opacity 1s ease-in-out;
+            text-align: center;
+            font-family: 'Great Vibes', cursive;
         }
 
-        #language-display.active {
-            opacity: 1;
+        #word {
+            font-size: 4rem; /* 文字大小 */
         }
 
         #pronunciation {
-            font-size: 2rem; /* 音标字体大小 */
+            font-size: 1.5rem; /* 音标大小 */
             margin-top: 10px;
             font-style: italic;
-        }
-
-        /* 最终表白文字样式 */
-        #final-text {
-            display: none;
-            font-size: 4rem;
-            color: white;
-            background: black;
-            padding: 20px;
         }
 
         /* 按钮样式 */
@@ -87,7 +59,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            z-index: 10;
         }
 
         button:focus {
@@ -96,39 +67,24 @@
     </style>
 </head>
 <body>
-    <!-- 背景视频 -->
-    <video id="background-video" autoplay loop muted>
-        <source src="88.mp4" type="video/mp4">
-        您的浏览器不支持 HTML5 视频。
-    </video>
-
     <!-- 开场白 -->
-    <div class="center-content" id="intro">
-        嘿！你知道美丽在不同语言中是如何表达的吗？
-    </div>
+    <div id="intro">嘿！你知道美丽在不同语言中是如何表达的吗？</div>
 
-    <!-- 中央内容 -->
-    <div class="center-content" id="language-display">
+    <!-- 主界面 -->
+    <div id="language-display" style="display: none;">
         <div id="word">Beautiful</div>
         <div id="pronunciation">/ˈbjuːtɪfəl/ (英语)</div>
     </div>
 
-    <!-- 最终表白前文字 -->
-    <div class="center-content" id="final-text">
-        我的语言：
-    </div>
-
     <!-- 播放声音按钮 -->
-    <button id="play-sound-button">点击播放读音</button>
+    <button id="play-sound-button" style="display: none;">点击播放读音</button>
 
     <script>
-        const backgroundVideo = document.getElementById('background-video');
         const intro = document.getElementById('intro');
         const languageDisplay = document.getElementById('language-display');
-        const finalText = document.getElementById('final-text');
+        const playSoundButton = document.getElementById('play-sound-button');
         const wordElement = document.getElementById('word');
         const pronunciationElement = document.getElementById('pronunciation');
-        const playSoundButton = document.getElementById('play-sound-button');
 
         const languages = [
             { word: "Beautiful", pronunciation: "/ˈbjuːtɪfəl/ (英语)", audio: "英语.mp3" },
@@ -136,10 +92,7 @@
             { word: "Hermosa", pronunciation: "/erˈmosa/ (西班牙语)", audio: "西班牙.mp3" },
             { word: "Красивый", pronunciation: "/kraˈsivɨj/ (俄语)", audio: "俄语.mp3" },
             { word: "Schön", pronunciation: "/ʃøːn/ (德语)", audio: "德语.mp3" },
-            { word: "美丽", pronunciation: "/měi lì/ (中文)", audio: "中文.mp3" },
-            { word: "美しい", pronunciation: "/utsukushii/ (日语)", audio: "日语.mp3" },
-            { word: "아름답다", pronunciation: "/a-reum-dap-da/ (韩语)", audio: "韩语.mp3" },
-            { word: "Bella", pronunciation: "/ˈbɛlla/ (意大利语)", audio: "意大利语.mp3" }
+            { word: "美丽", pronunciation: "/měi lì/ (中文)", audio: "中文.mp3" }
         ];
 
         let index = 0;
@@ -151,53 +104,38 @@
             const language = languages[index];
             wordElement.textContent = language.word;
             pronunciationElement.textContent = language.pronunciation;
-            languageDisplay.classList.add('active');
             playSoundButton.textContent = "点击播放读音";
         }
 
-        // 播放读音或切换到下一种语言
+        // 按钮点击事件
         playSoundButton.addEventListener('click', () => {
             if (isPlaying) {
                 // 切换到下一种语言
                 index++;
-                if (index < languages.length) {
-                    isPlaying = false;
-                    showLanguage();
-                } else {
-                    // 显示“我的语言：”
-                    languageDisplay.classList.remove('active');
-                    finalText.style.display = 'block';
-                    playSoundButton.style.display = 'none';
-
-                    // 显示3秒后切换到最终背景视频
-                    setTimeout(() => {
-                        finalText.style.display = 'none';
-                        backgroundVideo.src = "新.MOV";
-                        backgroundVideo.load();
-                        backgroundVideo.play();
-                    }, 3000);
+                if (index >= languages.length) {
+                    index = 0; // 回到第一种语言
                 }
+                isPlaying = false;
+                showLanguage();
             } else {
-                // 播放当前语言的音频
+                // 播放当前语言音频
                 const currentLanguage = languages[index];
                 audio.src = currentLanguage.audio;
-                audio.volume = 1.5; // 设置读音音量
-                audio.play().then(() => {
-                    isPlaying = true;
-                    playSoundButton.textContent = "点击切换到下一种语言";
-                }).catch((err) => {
-                    console.error("音频无法播放: ", err);
-                });
+                audio.play()
+                    .then(() => {
+                        isPlaying = true;
+                        playSoundButton.textContent = "点击切换到下一种语言";
+                    })
+                    .catch(err => console.error("音频无法播放:", err));
             }
         });
 
-        // 初始化：显示开场白并自动切换到语言展示
+        // 初始化显示
         setTimeout(() => {
-            intro.classList.add('hidden');
-            setTimeout(() => {
-                intro.style.display = 'none';
-                showLanguage();
-            }, 1000); // 等待隐藏动画完成
+            intro.classList.add('hidden'); // 隐藏开场白
+            languageDisplay.style.display = 'block'; // 显示主界面
+            playSoundButton.style.display = 'block'; // 显示按钮
+            showLanguage(); // 初始化语言
         }, 3000); // 开场白显示时间
     </script>
 </body>
