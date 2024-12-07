@@ -186,7 +186,7 @@
             } else {
                 const currentLanguage = languages[index];
                 audio.src = currentLanguage.audio;
-                audio.volume = 1.5; // 设置读音音量
+                audio.volume = 1.0; // 设置读音音量
                 audio.play()
                     .then(() => {
                         isPlaying = true;
