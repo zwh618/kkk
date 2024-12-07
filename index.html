@@ -60,7 +60,7 @@
         }
 
         #pronunciation {
-            font-size: 3rem; /* 音标字体大小 */
+            font-size: 2rem; /* 音标字体大小 */
             margin-top: 10px;
             font-style: italic;
         }
@@ -155,7 +155,7 @@
 
         // 启动背景音乐
         document.body.addEventListener('click', () => {
-            backgroundMusic.volume = 1.5; // 背景音乐音量
+            backgroundMusic.volume = 2.5; // 背景音乐音量
             backgroundMusic.play().catch(err => console.log("无法播放背景音乐：", err));
         });
 
@@ -170,6 +170,7 @@
 
         // 播放读音或切换到下一种语言
         playSoundButton.addEventListener('click', () => {
+            console.log("按钮被点击, 当前 index: ", index);
             if (isPlaying) {
                 index++;
                 if (index < languages.length) {
@@ -191,6 +192,7 @@
                 }
             } else {
                 const currentLanguage = languages[index];
+                console.log("当前播放音频: ", currentLanguage.audio);
                 audio.src = currentLanguage.audio;
                 audio.volume = 4.5; // 提高读音音量
                 audio.play().catch(err => console.error("音频无法播放: ", err));
