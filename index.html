@@ -33,12 +33,6 @@
             text-align: center;
             font-family: 'Great Vibes', cursive;
             display: none;
-            opacity: 0;
-            transition: opacity 2s ease-in-out; /* 渐入效果 */
-        }
-
-        #language-display.active {
-            opacity: 1;
         }
 
         #word {
@@ -94,6 +88,17 @@
             object-fit: cover;
             z-index: -1;
         }
+
+        #sound-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            z-index: 1000;
+            text-shadow: 2px 2px 5px #000;
+        }
     </style>
 </head>
 <body>
@@ -124,6 +129,9 @@
         您的浏览器不支持 HTML5 视频。
     </video>
 
+    <!-- 声音控制图标 -->
+    <div id="sound-control">🔈</div>
+
     <script>
         const intro = document.getElementById('intro');
         const languageDisplay = document.getElementById('language-display');
@@ -133,6 +141,7 @@
         const pronunciationElement = document.getElementById('pronunciation');
         const backgroundVideo = document.getElementById('background-video');
         const finalVideo = document.getElementById('final-video');
+        const soundControl = document.getElementById('sound-control');
 
         const languages = [
             { word: "Beautiful", pronunciation: "/ˈbjuːtɪfəl/ (英语)", audio: "英语.mp3" },
@@ -148,11 +157,14 @@
         let index = 0;
         let isPlaying = false;
         let audio = new Audio();
+        let isMuted = true; // 默认静音状态
 
         // 点击背景视频播放声音
-        backgroundVideo.addEventListener('click', () => {
-            backgroundVideo.muted = false; // 取消静音
-            backgroundVideo.volume = 0.5; // 设置音量
+        soundControl.addEventListener('click', () => {
+            isMuted = !isMuted; // 切换静音状态
+            backgroundVideo.muted = isMuted;
+            finalVideo.muted = isMuted;
+            soundControl.textContent = isMuted ? "🔈" : "🔊"; // 更改图标
         });
 
         // 显示语言
@@ -160,7 +172,6 @@
             const language = languages[index];
             wordElement.textContent = language.word;
             pronunciationElement.textContent = language.pronunciation;
-            languageDisplay.classList.add('active'); // 添加渐入效果
             playSoundButton.textContent = "点击播放读音";
         }
 
@@ -170,8 +181,7 @@
                 index++;
                 if (index < languages.length) {
                     isPlaying = false;
-                    languageDisplay.classList.remove('active'); // 渐出效果
-                    setTimeout(showLanguage, 2000); // 等待渐出动画完成后切换
+                    showLanguage();
                 } else {
                     // 显示表白文字
                     languageDisplay.style.display = 'none';
