@@ -51,7 +51,7 @@
         /* 语言展示样式 */
         #language-display {
             opacity: 0;
-            font-size: 8rem; /* 放大两倍 */
+            font-size: 6rem; /* 放大两倍 */
             transition: opacity 1s ease-in-out;
         }
 
@@ -121,15 +121,8 @@
     <!-- 播放声音按钮 -->
     <button id="play-sound-button">点击播放读音</button>
 
-    <!-- 背景音乐 -->
-    <audio id="background-music" loop>
-        <source src="轻.mp3" type="audio/mpeg">
-        您的浏览器不支持 HTML5 音频。
-    </audio>
-
     <script>
         const backgroundVideo = document.getElementById('background-video');
-        const backgroundMusic = document.getElementById('background-music');
         const intro = document.getElementById('intro');
         const languageDisplay = document.getElementById('language-display');
         const finalText = document.getElementById('final-text');
@@ -153,40 +146,29 @@
         let isPlaying = false;
         let audio = new Audio();
 
-        // 点击页面播放背景视频声音
-        document.body.addEventListener('click', () => {
-            backgroundVideo.muted = false;
-            backgroundVideo.volume = 0.5; // 背景视频音量
-        });
-
         // 显示语言
         function showLanguage() {
             const language = languages[index];
             wordElement.textContent = language.word;
             pronunciationElement.textContent = language.pronunciation;
             languageDisplay.classList.add('active');
-            playSoundButton.textContent = "听一听";
+            playSoundButton.textContent = "点击播放读音";
         }
 
         // 播放读音或切换到下一种语言
         playSoundButton.addEventListener('click', () => {
-            console.log(`点击按钮，当前 index: ${index}`);
             if (isPlaying) {
                 index++;
                 if (index < languages.length) {
-                    isPlaying = false;
                     showLanguage();
+                    isPlaying = false;
                 } else {
-                    // 显示“我的语言：”
+                    // 显示“我的语言：”文字
                     languageDisplay.classList.remove('active');
                     finalText.style.display = 'block';
                     playSoundButton.style.display = 'none';
 
-                    // 切换到背景音乐
-                    backgroundVideo.muted = true; // 静音背景视频
-                    backgroundMusic.volume = 0.5;
-                    backgroundMusic.play();
-
+                    // 显示3秒后切换到最终背景视频
                     setTimeout(() => {
                         finalText.style.display = 'none';
                         backgroundVideo.src = "新.MOV";
@@ -196,13 +178,20 @@
                 }
             } else {
                 const currentLanguage = languages[index];
-                console.log(`播放音频: ${currentLanguage.audio}`);
                 audio.src = currentLanguage.audio;
-                audio.volume = 1.5; // 提高读音音量
-                audio.play().catch(err => console.error("音频无法播放: ", err));
-                playSoundButton.textContent = "下一句";
+                audio.volume = 4.0; // 提高读音音量
+                audio.play().catch((err) => {
+                    console.error("音频无法播放: ", err);
+                });
+                playSoundButton.textContent = "点击切换到下一种语言";
                 isPlaying = true;
             }
+        });
+
+        // 点击屏幕播放背景视频声音
+        document.body.addEventListener('click', () => {
+            backgroundVideo.muted = false;
+            backgroundVideo.volume = 0.2; // 降低背景视频音量
         });
 
         // 初始化：显示开场白并自动切换到语言展示
