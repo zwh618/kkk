@@ -60,7 +60,7 @@
         }
 
         #pronunciation {
-            font-size: 2rem; /* 音标字体大小 */
+            font-size: 3rem; /* 音标字体大小 */
             margin-top: 10px;
             font-style: italic;
         }
@@ -154,8 +154,10 @@
         let audio = new Audio();
 
         // 启动背景音乐
-        backgroundMusic.volume = 1.0; // 背景音乐音量
-        backgroundMusic.play().catch(err => console.log("无法播放背景音乐：", err));
+        document.body.addEventListener('click', () => {
+            backgroundMusic.volume = 1.5; // 背景音乐音量
+            backgroundMusic.play().catch(err => console.log("无法播放背景音乐：", err));
+        });
 
         // 显示语言
         function showLanguage() {
@@ -190,7 +192,7 @@
             } else {
                 const currentLanguage = languages[index];
                 audio.src = currentLanguage.audio;
-                audio.volume = 5.0; // 提高读音音量
+                audio.volume = 4.5; // 提高读音音量
                 audio.play().catch(err => console.error("音频无法播放: ", err));
                 playSoundButton.textContent = "下一句";
                 isPlaying = true;
