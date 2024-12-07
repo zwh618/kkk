@@ -158,6 +158,7 @@
         // 播放读音或切换到下一种语言
         playSoundButton.addEventListener('click', () => {
             if (isPlaying) {
+                // 切换到下一种语言
                 index++;
                 if (index < languages.length) {
                     isPlaying = false;
@@ -168,7 +169,7 @@
                     finalText.style.display = 'block';
                     playSoundButton.style.display = 'none';
 
-                    // 切换到最终背景视频
+                    // 显示3秒后切换到最终背景视频
                     setTimeout(() => {
                         finalText.style.display = 'none';
                         backgroundVideo.src = "新.MOV";
@@ -177,14 +178,16 @@
                     }, 3000);
                 }
             } else {
+                // 播放当前语言的音频
                 const currentLanguage = languages[index];
                 audio.src = currentLanguage.audio;
-                audio.volume = 1.5; // 提高读音音量
-                audio.play().catch((err) => {
+                audio.volume = 1.5; // 设置读音音量
+                audio.play().then(() => {
+                    isPlaying = true;
+                    playSoundButton.textContent = "点击切换到下一种语言";
+                }).catch((err) => {
                     console.error("音频无法播放: ", err);
                 });
-                playSoundButton.textContent = "下一句";
-                isPlaying = true;
             }
         });
 
