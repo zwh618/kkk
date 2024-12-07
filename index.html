@@ -33,6 +33,12 @@
             text-align: center;
             font-family: 'Great Vibes', cursive;
             display: none;
+            opacity: 0;
+            transition: opacity 2s ease-in-out; /* 渐入效果 */
+        }
+
+        #language-display.active {
+            opacity: 1;
         }
 
         #word {
@@ -114,7 +120,7 @@
 
     <!-- 最终表白视频 -->
     <video id="final-video" autoplay loop muted>
-        <source src="新.MOV" type="video/mp4">
+        <source src="new.MOV" type="video/mp4">
         您的浏览器不支持 HTML5 视频。
     </video>
 
@@ -154,6 +160,7 @@
             const language = languages[index];
             wordElement.textContent = language.word;
             pronunciationElement.textContent = language.pronunciation;
+            languageDisplay.classList.add('active'); // 添加渐入效果
             playSoundButton.textContent = "点击播放读音";
         }
 
@@ -163,7 +170,8 @@
                 index++;
                 if (index < languages.length) {
                     isPlaying = false;
-                    showLanguage();
+                    languageDisplay.classList.remove('active'); // 渐出效果
+                    setTimeout(showLanguage, 2000); // 等待渐出动画完成后切换
                 } else {
                     // 显示表白文字
                     languageDisplay.style.display = 'none';
