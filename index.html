@@ -3,175 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>星战滚动文本</title>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>浪漫表白</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Noto+Sans+SC:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
+            background: radial-gradient(circle, #000428, #004e92);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            font-family: 'Noto Sans SC', sans-serif;
             overflow: hidden;
-            background: black;
-            color: yellow;
-            font-family: 'Georgia', serif;
         }
 
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 1; /* 粒子背景位于最底层 */
-        }
-
-        #scroll-container {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 2; /* 滚动文本位于粒子背景之上 */
-        }
-
-        #scrolling-text {
-            position: absolute;
-            bottom: -100%;
-            width: 100%;
+        #display-container {
             text-align: center;
-            line-height: 1.8;
-            font-size: 1.2rem;
-            animation: scrollUp 40s linear infinite; /* 动画持续 40 秒 */
-            text-shadow: 6px 6px 32px rgba(255, 215, 0, 1); /* 黄色光晕效果 */
+            animation: fadeInOut 2s infinite;
         }
 
-        @keyframes scrollUp {
-            0% {
-                bottom: -80%;
-            }
-            100% {
-                bottom: 100%;
-            }
+        #word {
+            font-size: 3rem;
+            font-family: 'Great Vibes', cursive;
+            transition: transform 1s ease;
         }
 
-        #audio-icon {
-            position: fixed;
-            bottom: 20px; /* 距离底部 20 像素 */
-            right: 20px; /* 距离右侧 20 像素 */
-            font-size: 30px;
-            color: yellow;
-            cursor: pointer;
-            z-index: 9999; /* 图标始终位于最顶层 */
-            text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.8); /* 光晕效果 */
+        #pronunciation {
+            margin-top: 10px;
+            font-size: 1.5rem;
+            font-style: italic;
+        }
+
+        #final-message {
+            display: none;
+            font-size: 3rem;
+            color: #ffd700;
+            font-family: 'Great Vibes', cursive;
+            animation: heartBeat 2s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.8); }
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
     </style>
 </head>
 <body>
-    <!-- 粒子背景 -->
-    <div id="particles-js"></div>
-
-    <!-- 滚动文本 -->
-    <div id="scroll-container">
-        <div id="scrolling-text">
-            <p>Bright star, would I were steadfast as thou art—</p>
-            <p>Not in lone splendour hung aloft the night,</p>
-            <p>And watching, with eternal lids apart,</p>
-            <p>Like nature’s patient, sleepless Eremite,</p>
-            <p>The moving waters at their priestlike task</p>
-            <p>Of pure ablution round earth’s human shores,</p>
-            <p>Or gazing on the new soft-fallen mask</p>
-            <p>Of snow upon the mountains and the moors—</p>
-            <p>No—yet still steadfast, still unchangeable,</p>
-            <p>Pillow’d upon my fair love’s ripening breast,</p>
-            <p>To feel for ever its soft fall and swell,</p>
-            <p>Awake for ever in a sweet unrest,</p>
-            <p>Still, still to hear her tender-taken breath,</p>
-            <p>And so live ever—or else swoon to death.</p>
-        </div>
+    <div id="display-container">
+        <div id="word">Beautiful</div>
+        <div id="pronunciation">/ˈbjuːtɪfəl/</div>
     </div>
-
-    <!-- 音效图标 -->
-    <div id="audio-icon" onclick="toggleAudio()">🎵</div>
-
-    <!-- 音效 -->
-    <audio id="background-audio" src="音频.mp3" loop></audio>
+    <div id="final-message">我的语言：李小花</div>
 
     <script>
-        // 初始化粒子背景
-        particlesJS('particles-js', {
-            particles: {
-                number: {
-                    value: 200, // 粒子数量
-                    density: { enable: true, value_area: 800 }
-                },
-                color: { value: "#ffffff" },
-                shape: {
-                    type: "circle",
-                    stroke: { width: 0, color: "#000000" }
-                },
-                opacity: {
-                    value: 0.6,
-                    random: false
-                },
-                size: {
-                    value: 3,
-                    random: true
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150, // 粒子连接的最大距离
-                    color: "#ffffff",
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 3,
-                    direction: "none",
-                    random: false,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false
-                }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: { enable: true, mode: "repulse" }, // 鼠标悬停时粒子远离
-                    onclick: { enable: true, mode: "push" }, // 鼠标点击时增加粒子
-                    resize: true
-                },
-                modes: {
-                    grab: { distance: 400, line_linked: { opacity: 1 } },
-                    bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 },
-                    repulse: { distance: 200, duration: 0.8 }, // 鼠标远离粒子效果增强
-                    push: { particles_nb: 4 },
-                    remove: { particles_nb: 2 }
-                }
-            },
-            retina_detect: true
-        });
+        // 定义语言和美丽的表达
+        const words = [
+            { text: "Beautiful", pronunciation: "/ˈbjuːtɪfəl/" },
+            { text: "Belle", pronunciation: "/bɛl/ (法语)" },
+            { text: "Hermosa", pronunciation: "/erˈmosa/ (西班牙语)" },
+            { text: "Красивый", pronunciation: "/kraˈsivɨj/ (俄语)" },
+            { text: "Schön", pronunciation: "/ʃøːn/ (德语)" },
+            { text: "美丽", pronunciation: "/měi lì/ (中文)" },
+        ];
 
-        // 音效控制
-        function toggleAudio() {
-            const audio = document.getElementById('background-audio');
-            const icon = document.getElementById('audio-icon');
-            if (audio.paused) {
-                audio.play();
-                icon.textContent = '🔊'; // 图标显示音效开启
+        const finalMessage = "我的语言：李小花"; // 表白语句
+        const container = document.getElementById("display-container");
+        const wordElement = document.getElementById("word");
+        const pronunciationElement = document.getElementById("pronunciation");
+        const finalMessageElement = document.getElementById("final-message");
+
+        let index = 0;
+
+        function showNextWord() {
+            if (index < words.length) {
+                // 显示当前语言文字
+                wordElement.textContent = words[index].text;
+                pronunciationElement.textContent = words[index].pronunciation;
+                index++;
             } else {
-                audio.pause();
-                icon.textContent = '🔇'; // 图标显示音效关闭
+                // 显示最终表白语句
+                container.style.display = "none";
+                finalMessageElement.style.display = "block";
             }
         }
 
-        // 自动播放尝试
-        const audio = document.getElementById('background-audio');
-        window.addEventListener('load', () => {
-            audio.play().catch(() => {
-                console.log("音效需要用户交互来播放。");
-            });
-        });
+        // 每 3 秒切换一次文字
+        setInterval(showNextWord, 3000);
     </script>
 </body>
 </html>
