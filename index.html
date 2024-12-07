@@ -20,7 +20,7 @@
         }
 
         #intro {
-            font-size: 3rem;
+            font-size: 4rem; /* 增大开场白字体 */
             font-family: 'Great Vibes', cursive;
             text-align: center;
         }
@@ -36,11 +36,11 @@
         }
 
         #word {
-            font-size: 4rem;
+            font-size: 5rem; /* 增大语言文字字体 */
         }
 
         #pronunciation {
-            font-size: 1.5rem;
+            font-size: 2rem; /* 增大音标字体 */
             margin-top: 10px;
             font-style: italic;
         }
@@ -61,7 +61,7 @@
         }
 
         #final-text {
-            font-size: 3rem;
+            font-size: 4rem; /* 增大表白文字字体 */
             font-family: 'Great Vibes', cursive;
             text-align: center;
             color: #fff;
@@ -125,7 +125,7 @@
         const languages = [
             { word: "Beautiful", pronunciation: "/ˈbjuːtɪfəl/ (英语)", audio: "英语.mp3" },
             { word: "Belle", pronunciation: "/bɛl/ (法语)", audio: "法语.mp3" },
-            { word: "Hermosa", pronunciation: "/erˈmosa/ (西班牙语)", audio: "西班牙语.mp3" },
+            { word: "Hermosa", pronunciation: "/erˈmosa/ (西班牙语)", audio: "西班牙.mp3" },
             { word: "Красивый", pronunciation: "/kraˈsivɨj/ (俄语)", audio: "俄语.mp3" },
             { word: "Schön", pronunciation: "/ʃøːn/ (德语)", audio: "德语.mp3" },
             { word: "美丽", pronunciation: "/měi lì/ (中文)", audio: "中文.mp3" },
@@ -137,6 +137,10 @@
         let isPlaying = false;
         let audio = new Audio();
         let isMuted = true; // 默认静音状态
+
+        // 设置视频默认音量
+        backgroundVideo.volume = 0.3;
+        finalVideo.volume = 0.3;
 
         // 声音控制图标点击事件
         soundControl.addEventListener('click', () => {
@@ -182,6 +186,7 @@
             } else {
                 const currentLanguage = languages[index];
                 audio.src = currentLanguage.audio;
+                audio.volume = 1.0; // 设置读音音量
                 audio.play()
                     .then(() => {
                         isPlaying = true;
